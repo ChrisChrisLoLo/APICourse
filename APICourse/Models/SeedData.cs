@@ -6,6 +6,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
+using Csv;
+
 
 namespace APICourse.Models
 {
@@ -40,12 +43,22 @@ namespace APICourse.Models
 
                 string file = Path.Combine(Directory.GetCurrentDirectory(),"Models","SeedDataInput","UAlbertaCoursesSingleTable.csv");
 
+                var csv = File.ReadAllText(file);
                 using (StreamReader reader = new StreamReader(file))
-                {
+                  string titleRow = reader.ReadLine();
                     while (!reader.EndOfStream)
                     {
+              {
+    
                         string csvRow = reader.ReadLine();
-                        string[] csvRowData = csvRow.Split(",");
+
+                        //Split row into data segments, then trim.
+
+                        string[] csvRowData = csvParser.Split(csvRow);
+
+                        for (int i=0;i<csvRowData.Length;i++){
+                            csvRowData[i] = csvRowData[i].Trim('"');
+                        }
 
                         Faculty queryFaculty;
                         Subject querySubject;
