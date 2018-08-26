@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -16,11 +17,11 @@ namespace APICourse.Models
         public DbSet<Faculty> Faculties { get; set; }
         public DbSet<Subject> Subjects { get; set; }
         public DbSet<Course> Courses { get; set; }
-
     }
 
     public class Faculty
-    {   
+    {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public string Name { get; set; }
 
@@ -29,6 +30,7 @@ namespace APICourse.Models
 
     public class Subject
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public string Name { get; set; }
         public string LetterCode { get; set; }
@@ -39,6 +41,7 @@ namespace APICourse.Models
 
     public class Course
     {
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         public string Name { get; set; }
         public int NumberCode { get; set; }
