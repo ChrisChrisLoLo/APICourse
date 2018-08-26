@@ -44,74 +44,62 @@ namespace APICourse.Models
                 string file = Path.Combine(Directory.GetCurrentDirectory(),"Models","SeedDataInput","UAlbertaCoursesSingleTable.csv");
 
                 var csv = File.ReadAllText(file);
-                using (StreamReader reader = new StreamReader(file))
-                  string titleRow = reader.ReadLine();
-                    while (!reader.EndOfStream)
+               
+                foreach(var csvRowData in CsvReader.ReadFromText(csv)){
+                    Faculty queryFaculty;
+                    Subject querySubject;
+
+                    string csvFacultyName = csvRowData[0];
+                    string csvSubjectName = csvRowData[1];
+                    string csvSubjectLetters = csvRowData[2];
+                    string csvCourseNumbers = csvRowData[3];
+                    string csvCourseTitle = csvRowData[4];
+                    string csvCourseSummary = csvRowData[5];
+
+                    //Csv rows contain duplicate faculty and subject entries. Only add entries to DB if they are unique.
+                    try
                     {
-              {
-    
-                        string csvRow = reader.ReadLine();
-
-                        //Split row into data segments, then trim.
-
-                        string[] csvRowData = csvParser.Split(csvRow);
-
-                        for (int i=0;i<csvRowData.Length;i++){
-                            csvRowData[i] = csvRowData[i].Trim('"');
-                        }
-
-                        Faculty queryFaculty;
-                        Subject querySubject;
-
-                        string csvFacultyName = csvRowData[0];
-                        string csvSubjectName = csvRowData[1];
-                        string csvSubjectLetters = csvRowData[2];
-                        string csvCourseNumbers = csvRowData[3];
-                        string csvCourseTitle = csvRowData[4];
-                        string csvCourseSummary = csvRowData[5];
-
-                        //Csv rows contain duplicate faculty and subject entries. Only add entries to DB if they are unique.
-                        try
-                        {   
-                            //Assume entry already exists in DB.
-                            queryFaculty = context.Faculties.Single(f => f.Name == csvFacultyName);
-                        }
-                        catch
-                        {
-                            Faculty newFaculty = new Faculty { Name = csvFacultyName };
-                            context.Faculties.Add(newFaculty);
-                            context.SaveChanges();
-                            //Querying after adding newFaculty since the queried faculty should now have an id generated after saving.
-                            queryFaculty = context.Faculties.Single(f => f.Name == csvFacultyName);
-
-                        }
-
-                        try
-                        {
-                            querySubject = context.Subjects.Single(s => s.Name == csvSubjectName && s.LetterCode == csvSubjectLetters);
-                        }
-                        catch
-                        {
-                            Subject newSubject = new Subject { Name = csvSubjectName,
-                                                               LetterCode = csvSubjectLetters,
-                                                               Faculty = queryFaculty};
-                            context.Subjects.Add(newSubject);
-                            context.SaveChanges();
-                            querySubject = context.Subjects.Single(s => s.Name == csvSubjectName && s.LetterCode == csvSubjectLetters);
-                        }
-
-                        Course newCourse = new Course { NumberCode = Int32.Parse(csvCourseNumbers),
-                                                        Name = csvCourseTitle,
-                                                        Description = csvCourseSummary,
-                                                        Subject = querySubject};
-                        context.Courses.Add(newCourse);
-                        context.SaveChanges();
+                        //Assume entry already exists in DB.
+                        queryFaculty = context.Faculties.Single(f => f.Name == csvFacultyName);
                     }
+                    catch
+                    {
+                        Faculty newFaculty = new Faculty { Name = csvFacultyName };
+                        context.Faculties.Add(newFaculty);
+                        context.SaveChanges();
+                        //Querying after adding newFaculty since the queried faculty should now have an id generated after saving.
+                        queryFaculty = context.Faculties.Single(f => f.Name == csvFacultyName);
+
+                    }
+
+                    try
+                    {
+                        querySubject = context.Subjects.Single(s => s.Name == csvSubjectName && s.LetterCode == csvSubjectLetters);
+                    }
+                    catch
+                    {
+                        Subject newSubject = new Subject
+                        {
+                            Name = csvSubjectName,
+                            LetterCode = csvSubjectLetters,
+                            Faculty = queryFaculty
+                        };
+                        context.Subjects.Add(newSubject);
+                        context.SaveChanges();
+                        querySubject = context.Subjects.Single(s => s.Name == csvSubjectName && s.LetterCode == csvSubjectLetters);
+                    }
+
+                    Course newCourse = new Course
+                    {
+                        NumberCode = Int32.Parse(csvCourseNumbers),
+                        Name = csvCourseTitle,
+                        Description = csvCourseSummary,
+                        Subject = querySubject
+                    };
+                    context.Courses.Add(newCourse);
+                    context.SaveChanges();
                 }
-
-
-                //context.SaveChanges();
-            }
+            }   
         }
     }
 }
