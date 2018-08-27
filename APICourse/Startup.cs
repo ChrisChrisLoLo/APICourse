@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.EntityFrameworkCore;
 using APICourse.Models;
+using Microsoft.AspNetCore.OData;
 
 namespace APICourse
 {
@@ -27,6 +28,7 @@ namespace APICourse
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddOData();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddDbContext<APICourseContext>(options =>
                 options.UseSqlite("Data Source=APICourse.db"));
@@ -43,6 +45,8 @@ namespace APICourse
             {
                 app.UseHsts();
             }
+
+            var builder = new ODataConventionModelBuilder();
 
             app.UseHttpsRedirection();
             app.UseMvc();

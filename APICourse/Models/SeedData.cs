@@ -82,6 +82,7 @@ namespace APICourse.Models
                         {
                             Name = csvSubjectName,
                             LetterCode = csvSubjectLetters,
+                            FacultyID = queryFaculty.ID,
                             Faculty = queryFaculty
                         };
                         context.Subjects.Add(newSubject);
@@ -94,6 +95,7 @@ namespace APICourse.Models
                         NumberCode = Int32.Parse(csvCourseNumbers),
                         Name = csvCourseTitle,
                         Description = csvCourseSummary,
+                        SubjectID = querySubject.ID,
                         Subject = querySubject
                     };
                     context.Courses.Add(newCourse);

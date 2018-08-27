@@ -35,6 +35,7 @@ namespace APICourse.Models
         public string Name { get; set; }
         public string LetterCode { get; set; }
 
+        public int FacultyID { get; set; }
         public Faculty Faculty { get; set; }
         public List<Course> Courses { get; set; }
     }
@@ -47,6 +48,7 @@ namespace APICourse.Models
         public int NumberCode { get; set; }
         public string Description { get; set; }
 
+        public int SubjectID { get; set; }
         public Subject Subject { get; set; }
     }
 

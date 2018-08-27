@@ -2,7 +2,7 @@
 
 namespace APICourse.Migrations
 {
-    public partial class Initial : Migration
+    public partial class CreateInit : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -27,7 +27,7 @@ namespace APICourse.Migrations
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: true),
                     LetterCode = table.Column<string>(nullable: true),
-                    FacultyID = table.Column<int>(nullable: true)
+                    FacultyID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -37,7 +37,7 @@ namespace APICourse.Migrations
                         column: x => x.FacultyID,
                         principalTable: "Faculties",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -49,7 +49,7 @@ namespace APICourse.Migrations
                     Name = table.Column<string>(nullable: true),
                     NumberCode = table.Column<int>(nullable: false),
                     Description = table.Column<string>(nullable: true),
-                    SubjectID = table.Column<int>(nullable: true)
+                    SubjectID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -59,7 +59,7 @@ namespace APICourse.Migrations
                         column: x => x.SubjectID,
                         principalTable: "Subjects",
                         principalColumn: "ID",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
