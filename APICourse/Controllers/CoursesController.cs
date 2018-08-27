@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using APICourse.Models;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.AspNetCore.OData;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -24,7 +23,6 @@ namespace APICourse.Controllers
 
         // GET: api/<controller>
         [HttpGet]
-        [EnableQuery]
         public ActionResult<List<Course>> GetAll()
         {
             return _context.Courses.ToList();
